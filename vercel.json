@@ -1,17 +1,7 @@
 {
-  "version": 2,
-  "functions": {
-    "api/*.js": {
-      "includeFiles": "css/**, js/**, index.html, database/**, sw.js"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/(.*)",
       "destination": "/api/index.js"
     }
   ]
