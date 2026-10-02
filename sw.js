@@ -3,7 +3,7 @@
    Network First Strategy with Automatic Cache Busting
    ========================================================================== */
 
-const CACHE_NAME = 'shiksha-setu-cache-v7';
+const CACHE_NAME = 'shiksha-setu-cache-v9';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -16,7 +16,8 @@ const ASSETS_TO_CACHE = [
   './js/progress.js',
   './js/quiz.js',
   './js/builder.js',
-  './js/app.js'
+  './js/app.js',
+  './js/modules.js'
 ];
 
 // Install Event - Immediately activate new service worker

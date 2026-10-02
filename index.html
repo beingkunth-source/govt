@@ -495,26 +495,36 @@
 
 
         <!-- ===============================================
-             SETTINGS
+             SETTINGS & QUICK GEAR
         ================================================ -->
 
-        <li class="auth-nav-item">
+        <li class="student-nav teacher-nav">
+          <a
+            href="javascript:void(0)"
+            onclick="AppRouter.toggleQuickSettingsDrawer()"
+            class="nav-link quick-gear-nav-link"
+          >
+            <span class="nav-icon spinning-gear-icon">
+              ⚙️
+            </span>
+            <span>
+              Quick Settings ⚙️
+            </span>
+          </a>
+        </li>
 
+        <li class="student-nav teacher-nav">
           <a
             href="#settings"
             class="nav-link"
           >
-
             <span class="nav-icon">
               ⚙️
             </span>
-
             <span data-i18n="nav_settings">
               Settings
             </span>
-
           </a>
-
         </li>
 
       </ul>
@@ -698,6 +708,81 @@
     </a>
 
   </nav>
+
+
+  <!-- =====================================================
+       FLOATING QUICK SETTINGS GEAR BUTTON & DRAWER
+  ====================================================== -->
+  <button
+    id="floating-gear-btn"
+    class="floating-gear-btn"
+    onclick="AppRouter.toggleQuickSettingsDrawer()"
+    aria-label="Toggle Quick Settings"
+    title="Quick Settings ⚙️"
+  >
+    ⚙️
+  </button>
+
+  <div id="quick-settings-drawer" class="quick-settings-drawer" aria-label="Quick Settings Drawer">
+    <div class="drawer-header">
+      <h3>⚙️ Quick Settings</h3>
+      <button class="drawer-close-btn" onclick="AppRouter.toggleQuickSettingsDrawer()" aria-label="Close Settings">✕</button>
+    </div>
+    <div class="drawer-body">
+      <!-- Theme Selection -->
+      <div class="setting-group">
+        <label class="setting-label">🎨 Theme Mode</label>
+        <div class="btn-group">
+          <button id="theme-btn-light" class="btn btn-sm btn-primary" onclick="AccessibilityManager.setTheme('light'); AppRouter.updateQuickSettingsUI();">☀️ Light</button>
+          <button id="theme-btn-dark" class="btn btn-sm btn-outline" onclick="AccessibilityManager.setTheme('dark'); AppRouter.updateQuickSettingsUI();">🌙 Dark</button>
+        </div>
+      </div>
+
+      <!-- Font Size / Text Scaling -->
+      <div class="setting-group">
+        <label class="setting-label">🔤 Text Scale</label>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-outline" onclick="AccessibilityManager.setFontSize('sm'); AppRouter.updateQuickSettingsUI();">Small</button>
+          <button class="btn btn-sm btn-outline" onclick="AccessibilityManager.setFontSize('md'); AppRouter.updateQuickSettingsUI();">Normal</button>
+          <button class="btn btn-sm btn-outline" onclick="AccessibilityManager.setFontSize('lg'); AppRouter.updateQuickSettingsUI();">Large</button>
+          <button class="btn btn-sm btn-outline" onclick="AccessibilityManager.setFontSize('xl'); AppRouter.updateQuickSettingsUI();">X-Large</button>
+        </div>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="setting-group">
+        <label class="setting-label">🌐 Select Language</label>
+        <div class="lang-btn-group btn-group">
+          <button data-lang="en" class="btn btn-sm btn-primary" onclick="LanguageManager.setLanguage('en'); AppRouter.updateQuickSettingsUI();">🇬🇧 English</button>
+          <button data-lang="hi" class="btn btn-sm btn-outline" onclick="LanguageManager.setLanguage('hi'); AppRouter.updateQuickSettingsUI();">🇮🇳 हिंदी</button>
+          <button data-lang="mr" class="btn btn-sm btn-outline" onclick="LanguageManager.setLanguage('mr'); AppRouter.updateQuickSettingsUI();">🇮🇳 मराठी</button>
+        </div>
+      </div>
+
+      <!-- High Contrast Mode -->
+      <div class="setting-group">
+        <label class="setting-label">👁️ High Contrast Mode</label>
+        <button id="contrast-toggle-btn" class="btn btn-sm btn-outline style-full" onclick="AccessibilityManager.toggleHighContrast(); AppRouter.updateQuickSettingsUI();">
+          🌓 Toggle High Contrast
+        </button>
+      </div>
+
+      <!-- Low Data Mode -->
+      <div class="setting-group">
+        <label class="setting-label">📡 Low Data Mode</label>
+        <button id="lowdata-toggle-btn" class="btn btn-sm btn-outline style-full" onclick="AccessibilityManager.toggleLowData(); AppRouter.updateQuickSettingsUI();">
+          ⚡ Toggle Low Data Mode
+        </button>
+      </div>
+
+      <!-- Full Settings Link -->
+      <div class="setting-group" style="margin-top: 24px;">
+        <a href="#settings" class="btn btn-primary style-full" style="display: block; text-align: center;" onclick="AppRouter.toggleQuickSettingsDrawer()">
+          ⚙️ Open Full Settings Page
+        </a>
+      </div>
+    </div>
+  </div>
 
 
   <!-- =====================================================

@@ -9,6 +9,8 @@ const AccessibilityManager = {
   synth: window.speechSynthesis || null,
   currentUtterance: null,
 
+  theme: 'light',
+
   init() {
     // Load stored settings
     const savedFontSize = localStorage.getItem('shiksha_font_size');
@@ -19,7 +21,29 @@ const AccessibilityManager = {
 
     const savedLowData = localStorage.getItem('shiksha_low_data');
     if (savedLowData === 'true') this.setLowData(true);
+
+    const savedTheme = localStorage.getItem('shiksha_theme');
+    if (savedTheme) this.setTheme(savedTheme);
   },
+
+  setTheme(mode) {
+    if (!['light', 'dark'].includes(mode)) return;
+    this.theme = mode;
+    localStorage.setItem('shiksha_theme', mode);
+    
+    if (mode === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: mode } }));
+  },
+
+  toggleTheme() {
+    this.setTheme(this.theme === 'dark' ? 'light' : 'dark');
+  },
+
 
   setFontSize(size) {
     const validSizes = ['sm', 'md', 'lg', 'xl'];

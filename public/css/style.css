@@ -1042,6 +1042,175 @@ body.low-data-mode .banner-graphic {
   box-shadow: var(--box-shadow-md);
 }
 
+
+/* --- Dark Mode Styles --- */
+html.dark-mode {
+  --bg-primary: #0f172a;
+  --bg-surface: #1e293b;
+  --bg-subtle: #334155;
+  --bg-highlight: #1e3a8a;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-on-primary: #ffffff;
+
+  --color-primary: #10b981;
+  --color-primary-hover: #059669;
+  --color-primary-dark: #047857;
+  --color-primary-light: #064e3b;
+  --color-primary-subtle: #022c22;
+
+  --border-color: #334155;
+  --border-subtle: #1e293b;
+  --box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode .app-header {
+  background-color: rgba(30, 41, 59, 0.92);
+  border-bottom-color: #334155;
+}
+
+html.dark-mode .app-sidebar {
+  background-color: #1e293b;
+  border-right-color: #334155;
+}
+
+html.dark-mode .card,
+html.dark-mode .modal-content,
+html.dark-mode .quick-settings-drawer {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+html.dark-mode .nav-link {
+  color: #cbd5e1;
+}
+
+html.dark-mode .nav-link:hover,
+html.dark-mode .nav-link.active {
+  background-color: #064e3b;
+  color: #34d399;
+}
+
+/* --- Floating Quick Settings Gear Button --- */
+.floating-gear-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.floating-gear-btn:hover {
+  transform: scale(1.1) rotate(45deg);
+  box-shadow: 0 10px 28px rgba(5, 150, 105, 0.5);
+}
+
+/* --- Slide-out Quick Settings Drawer --- */
+.quick-settings-drawer {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 340px;
+  height: 100vh;
+  background-color: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.quick-settings-drawer.active {
+  right: 0;
+}
+
+.quick-settings-drawer .drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.quick-settings-drawer .drawer-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quick-settings-drawer .drawer-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-settings-drawer .drawer-close-btn:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.quick-settings-drawer .setting-group {
+  margin-bottom: 20px;
+}
+
+.quick-settings-drawer .setting-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.quick-settings-drawer .btn-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.quick-settings-drawer .style-full {
+  width: 100%;
+}
+
+/* --- Spinning Gear Icon Animation for Sidebar --- */
+.spinning-gear-icon {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.quick-gear-nav-link:hover .spinning-gear-icon {
+  transform: rotate(90deg);
+}
+
 /* --- Responsive Media Queries --- */
 @media (max-width: 768px) {
   .app-sidebar {
@@ -1071,6 +1240,19 @@ body.low-data-mode .banner-graphic {
     flex-direction: column;
     gap: var(--space-lg);
   }
+
+  .floating-gear-btn {
+    bottom: 75px;
+    right: 16px;
+    width: 46px;
+    height: 46px;
+    font-size: 1.3rem;
+  }
+
+  .quick-settings-drawer {
+    width: 100%;
+    right: -100%;
+  }
 }
 
 /* --- Print Stylesheet --- */
@@ -1084,6 +1266,8 @@ body.low-data-mode .banner-graphic {
   .app-sidebar,
   .mobile-nav,
   .btn-print-hide,
+  .floating-gear-btn,
+  .quick-settings-drawer,
   .header-actions {
     display: none !important;
   }
@@ -1101,3 +1285,4 @@ body.low-data-mode .banner-graphic {
     page-break-inside: avoid;
   }
 }
+

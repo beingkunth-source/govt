@@ -4544,10 +4544,48 @@ attempts = [
     ProgressTracker.saveState();
     alert('Settings saved successfully!');
     this.navigate('dashboard');
+  },
+
+  toggleQuickSettingsDrawer() {
+    const drawer = document.getElementById('quick-settings-drawer');
+    if (drawer) {
+      drawer.classList.toggle('active');
+      this.updateQuickSettingsUI();
+    }
+  },
+
+  updateQuickSettingsUI() {
+    const drawer = document.getElementById('quick-settings-drawer');
+    if (!drawer || !drawer.classList.contains('active')) return;
+
+    const lang = (typeof LanguageManager !== 'undefined') ? LanguageManager.currentLang : 'en';
+    const theme = (typeof AccessibilityManager !== 'undefined') ? AccessibilityManager.theme : 'light';
+    const contrast = (typeof AccessibilityManager !== 'undefined') ? AccessibilityManager.isHighContrast : false;
+    const lowData = (typeof AccessibilityManager !== 'undefined') ? AccessibilityManager.isLowData : false;
+
+    drawer.querySelectorAll('.lang-btn-group button').forEach(btn => {
+      if (btn.getAttribute('data-lang') === lang) {
+        btn.className = 'btn btn-sm btn-primary';
+      } else {
+        btn.className = 'btn btn-sm btn-outline';
+      }
+    });
+
+    const lightBtn = drawer.querySelector('#theme-btn-light');
+    const darkBtn = drawer.querySelector('#theme-btn-dark');
+    if (lightBtn) lightBtn.className = theme === 'light' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+    if (darkBtn) darkBtn.className = theme === 'dark' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+    const contrastBtn = drawer.querySelector('#contrast-toggle-btn');
+    if (contrastBtn) contrastBtn.className = contrast ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+
+    const lowDataBtn = drawer.querySelector('#lowdata-toggle-btn');
+    if (lowDataBtn) lowDataBtn.className = lowData ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
   }
 };
 
 if (typeof window !== 'undefined') {
   window.AppRouter = AppRouter;
 }
+
 
