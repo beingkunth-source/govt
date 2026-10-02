@@ -228,45 +228,90 @@ const AuthoringEngine = {
 
     res.topic.status = 'Assigned';
     res.course.status = 'Assigned';
-    res.course.assignedCount += 1;
+    res.course.assignedCount = (res.course.assignedCount || 0) + 1;
+
+    let targetClassId = parseInt(res.course.classId) || 8;
+    if (assignObj && assignObj.assignedTo) {
+      const match = String(assignObj.assignedTo).match(/\d+/);
+      if (match) targetClassId = parseInt(match[0]);
+    }
 
     const newAssignment = {
       id: 'asg_' + Date.now(),
       courseId: res.course.id,
       topicId: res.topic.id,
       topicTitle: res.topic.title,
-      classId: res.course.classId,
+      classId: targetClassId,
       section: assignObj.section || 'All',
-      assignedTo: assignObj.assignedTo || `Class ${res.course.classId}`,
-      deadline: assignObj.deadline || '2026-10-15',
+      assignedTo: assignObj.assignedTo || `Class ${targetClassId}`,
+      deadline: assignObj.deadline || '2026-10-25',
       status: 'Assigned'
     };
 
-    SHIKSHA_DATA.assignments.unshift(newAssignment);
+    if (!Array.isArray(SHIKSHA_DATA.assignments)) {
+      SHIKSHA_DATA.assignments = [];
+    }
+
+    // Avoid duplicate assignment entries for same topic
+    const existingIdx = SHIKSHA_DATA.assignments.findIndex(a => a.topicId === res.topic.id && parseInt(a.classId) === targetClassId);
+    if (existingIdx >= 0) {
+      SHIKSHA_DATA.assignments[existingIdx] = newAssignment;
+    } else {
+      SHIKSHA_DATA.assignments.unshift(newAssignment);
+    }
+
     this.saveState();
+
+    if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('assignmentUpdated'));
+    }
+
     return newAssignment;
   },
 
-  // --- Strict Student Permission Filter ---
-  // Students ONLY see topics that are Published or Assigned!
+  // --- Student Permission & Assignment Filter ---
+  // Returns ALL topics published or assigned for studentClassId
   getStudentAssignedTopics(studentClassId = 8) {
+    const targetClass = parseInt(studentClassId);
     const allowed = [];
-    SHIKSHA_DATA.courses.forEach(course => {
-      if (course.classId === parseInt(studentClassId)) {
-        course.chapters.forEach(chapter => {
-          chapter.topics.forEach(topic => {
-            // Strict check: Status MUST be Published or Assigned
-            if (topic.status === 'Published' || topic.status === 'Assigned') {
+    const addedTopicIds = new Set();
+
+    // 1. Check all LMS courses matching target class or containing assigned/published topics
+    (SHIKSHA_DATA.courses || []).forEach(course => {
+      const isClassMatch = parseInt(course.classId) === targetClass;
+      (course.chapters || []).forEach(chapter => {
+        (chapter.topics || []).forEach(topic => {
+          if (topic.status === 'Published' || topic.status === 'Assigned') {
+            if (isClassMatch && !addedTopicIds.has(topic.id)) {
+              addedTopicIds.add(topic.id);
               allowed.push({
                 courseTitle: course.title,
                 chapterTitle: chapter.title,
                 topic
               });
             }
-          });
+          }
         });
+      });
+    });
+
+    // 2. Check SHIKSHA_DATA.assignments for explicit assignments for targetClass
+    (SHIKSHA_DATA.assignments || []).forEach(asg => {
+      const asgClass = parseInt(asg.classId);
+      const isTarget = asgClass === targetClass || (asg.assignedTo && (asg.assignedTo.includes(`Class ${targetClass}`) || asg.assignedTo === 'All'));
+      if (isTarget) {
+        const found = this.findTopic(asg.topicId);
+        if (found && !addedTopicIds.has(found.topic.id)) {
+          addedTopicIds.add(found.topic.id);
+          allowed.push({
+            courseTitle: found.course.title,
+            chapterTitle: found.chapter.title,
+            topic: found.topic
+          });
+        }
       }
     });
+
     return allowed;
   }
 };

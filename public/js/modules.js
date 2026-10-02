@@ -244,39 +244,68 @@ AppRouter.submitDoubt = function() {
    MODULE 3: INTERACTIVE SCIENCE LAB SIMULATIONS
    ════════════════════════════════════════════════════════ */
 AppRouter._currentLab = null;
+AppRouter._selectedLabClass = 'all';
 
 AppRouter.renderScienceLab = function(main) {
   const labs = [
-    { id: 'pendulum', icon: '🔩', title: 'Simple Pendulum', desc: 'Explore how length & gravity affect the period of oscillation', subject: 'Physics', class: 9 },
-    { id: 'acid-base', icon: '🧪', title: 'Acid-Base Indicator', desc: 'Test liquids with pH indicator and observe color changes', subject: 'Chemistry', class: 8 },
+    // Class 6
     { id: 'food-chain', icon: '🌱', title: 'Food Chain Builder', desc: 'Build and balance an ecosystem food chain interactively', subject: 'Biology', class: 6 },
-    { id: 'circuit', icon: '⚡', title: 'Electric Circuit Sim', desc: 'Build series and parallel circuits and measure current/voltage', subject: 'Physics', class: 10 },
-    { id: 'plant-cell', icon: '🟩', title: 'Plant vs Animal Cell', desc: 'Explore and label organelles in plant and animal cells', subject: 'Biology', class: 8 },
+    { id: 'light-shadow', icon: '🔦', title: 'Light & Shadow Optics', desc: 'Move light source to observe shadow length and opacity changes', subject: 'Physics', class: 6 },
+    { id: 'separation-mixtures', icon: '🌾', title: 'Separation of Substances', desc: 'Explore sieving, magnetic separation, and filtration of mixtures', subject: 'Chemistry', class: 6 },
+    // Class 7
     { id: 'states-matter', icon: '💧', title: 'States of Matter', desc: 'Observe particles in solid, liquid, and gas states with heating', subject: 'Chemistry', class: 7 },
+    { id: 'friction', icon: '🛷', title: 'Friction & Resistance', desc: 'Slide objects across Ice, Wood, and Rough surfaces to test friction', subject: 'Physics', class: 7 },
+    { id: 'photosynthesis-lab', icon: '🍃', title: 'Photosynthesis Rate', desc: 'Vary sunlight intensity to measure oxygen bubble production rate', subject: 'Biology', class: 7 },
+    // Class 8
+    { id: 'acid-base', icon: '🧪', title: 'Acid-Base Indicator', desc: 'Test liquids with pH indicator and observe color changes', subject: 'Chemistry', class: 8 },
+    { id: 'plant-cell', icon: '🟩', title: 'Plant vs Animal Cell', desc: 'Explore and label organelles in plant and animal cells', subject: 'Biology', class: 8 },
+    { id: 'sound-waves', icon: '🔊', title: 'Sound Waves & Pitch', desc: 'Adjust frequency (pitch) and amplitude (loudness) visually', subject: 'Physics', class: 8 },
+    // Class 9
+    { id: 'pendulum', icon: '🔩', title: 'Simple Pendulum', desc: 'Explore how length & gravity affect the period of oscillation', subject: 'Physics', class: 9 },
+    { id: 'density-flotation', icon: '🚢', title: 'Density & Buoyancy', desc: 'Test floating vs sinking in water, oil, and syrup using density', subject: 'Physics', class: 9 },
+    // Class 10
+    { id: 'circuit', icon: '⚡', title: 'Electric Circuit Sim', desc: 'Build series and parallel circuits and measure current/voltage', subject: 'Physics', class: 10 },
+    { id: 'lens-optics', icon: '🔍', title: 'Convex Lens Optics', desc: 'Drag object along principal axis to observe real vs virtual image', subject: 'Physics', class: 10 },
   ];
 
   if (AppRouter._currentLab) {
     return AppRouter._renderLabSim(main, AppRouter._currentLab);
   }
 
+  const selectedClass = AppRouter._selectedLabClass || 'all';
+  const filteredLabs = selectedClass === 'all' 
+    ? labs 
+    : labs.filter(l => l.class === parseInt(selectedClass));
+
   main.innerHTML = `
     <div class="section-header">
       <div>
         <h2 class="section-title">🔬 Virtual Science Lab</h2>
-        <div class="section-subtitle">Hands-on interactive simulations for Science concepts — no equipment needed!</div>
+        <div class="section-subtitle">Hands-on interactive simulations for Science concepts — Class 6 to Class 10!</div>
       </div>
+    </div>
+
+    <!-- Filter Pills -->
+    <div style="display:flex;gap:8px;margin-bottom:var(--space-lg);flex-wrap:wrap;align-items:center;">
+      <span style="font-weight:700;font-size:0.9rem;margin-right:4px;">Filter by Class:</span>
+      ${['all', '6', '7', '8', '9', '10'].map(cls => `
+        <button class="btn btn-sm ${selectedClass === cls ? 'btn-primary' : 'btn-outline'}"
+                onclick="AppRouter._selectedLabClass='${cls}'; AppRouter.renderScienceLab(document.getElementById('view-container'));">
+          ${cls === 'all' ? '✨ All Classes (6-10)' : `Class ${cls}`}
+        </button>
+      `).join('')}
     </div>
 
     <div style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid var(--border-color);border-radius:var(--border-radius-xl);padding:var(--space-xl);margin-bottom:var(--space-xl);display:flex;align-items:center;gap:var(--space-lg);flex-wrap:wrap;">
       <div style="font-size:3.5rem;">🔬</div>
       <div>
         <div style="font-size:1.25rem;font-weight:800;color:var(--text-primary);margin-bottom:4px;">Welcome to the Virtual Lab!</div>
-        <div style="color:var(--text-muted);max-width:550px;">Choose any simulation below to start experimenting. Each lab includes interactive controls, real-time observations, and science explanations.</div>
+        <div style="color:var(--text-muted);max-width:550px;">Choose any simulation below to start experimenting. Each lab includes interactive controls, real-time observations, and science explanations tailored for NCERT Classes 6-10.</div>
       </div>
     </div>
 
     <div class="grid-3">
-      ${labs.map(lab => `
+      ${filteredLabs.map(lab => `
         <div class="card" style="cursor:pointer;text-align:center;padding:var(--space-xl);" onclick="AppRouter._currentLab='${lab.id}'; AppRouter.renderScienceLab(document.getElementById('view-container'));" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
           <div style="font-size:3rem;margin-bottom:var(--space-md);">${lab.icon}</div>
           <div style="font-weight:800;font-size:1.05rem;margin-bottom:4px;">${lab.title}</div>
@@ -293,12 +322,19 @@ AppRouter.renderScienceLab = function(main) {
 
 AppRouter._renderLabSim = function(main, labId) {
   const labContent = {
-    'pendulum': AppRouter._labPendulum(),
-    'acid-base': AppRouter._labAcidBase(),
     'food-chain': AppRouter._labFoodChain(),
-    'circuit': AppRouter._labCircuit(),
-    'plant-cell': AppRouter._labPlantCell(),
+    'light-shadow': AppRouter._labLightShadow(),
+    'separation-mixtures': AppRouter._labSeparationMixtures(),
     'states-matter': AppRouter._labStatesMatter(),
+    'friction': AppRouter._labFriction(),
+    'photosynthesis-lab': AppRouter._labPhotosynthesis(),
+    'acid-base': AppRouter._labAcidBase(),
+    'plant-cell': AppRouter._labPlantCell(),
+    'sound-waves': AppRouter._labSoundWaves(),
+    'pendulum': AppRouter._labPendulum(),
+    'density-flotation': AppRouter._labDensityFlotation(),
+    'circuit': AppRouter._labCircuit(),
+    'lens-optics': AppRouter._labLensOptics(),
   };
 
   main.innerHTML = `
@@ -312,7 +348,307 @@ AppRouter._renderLabSim = function(main, labId) {
   `;
 };
 
+AppRouter._labLightShadow = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🔦 Light, Shadow & Reflection Lab (Class 6)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Move the light source closer or farther from the opaque object to observe how shadow size changes!</p>
+      <div style="background:var(--bg-subtle);border-radius:var(--border-radius-xl);padding:var(--space-xl);height:200px;position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;">
+        <div id="torch-icon" style="font-size:2.5rem;transition:transform 0.3s;">🔦</div>
+        <div id="target-block" style="width:40px;height:70px;background:#374151;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;">Object</div>
+        <div id="shadow-cast" style="width:80px;height:120px;background:rgba(0,0,0,0.65);border-radius:4px;transition:all 0.3s;box-shadow:0 0 20px rgba(0,0,0,0.5);"></div>
+        <div style="position:absolute;right:10px;top:10px;background:var(--bg-surface);padding:4px 10px;border-radius:4px;font-weight:700;font-size:0.8rem;border:1px solid var(--border-color);">Screen</div>
+      </div>
+      <div style="margin-top:var(--space-lg);">
+        <label class="form-label">Distance from Light to Object: <strong id="dist-val">50</strong> cm</label>
+        <input type="range" min="10" max="90" value="50" style="width:100%;accent-color:var(--color-primary);" oninput="
+          const d = parseInt(this.value);
+          document.getElementById('dist-val').textContent = d;
+          const scale = ((100 - d) / 30).toFixed(2);
+          const shadowHeight = Math.round(70 * Math.max(0.5, scale));
+          const shadowOpacity = (0.9 - (d/120)).toFixed(2);
+          document.getElementById('shadow-cast').style.height = shadowHeight + 'px';
+          document.getElementById('shadow-cast').style.background = 'rgba(0,0,0,' + shadowOpacity + ')';
+        ">
+      </div>
+      <div style="margin-top:var(--space-lg);padding:var(--space-md);background:var(--bg-highlight);border-radius:var(--border-radius-lg);text-align:left;">
+        <strong>📖 Science Concept:</strong> Light travels in a <strong>straight line</strong>. When an opaque object blocks the light path, it casts a shadow. Closer light source = <strong>larger shadow</strong>!
+      </div>
+    </div>
+  `;
+};
+
+AppRouter._labSeparationMixtures = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🌾 Separation of Substances Lab (Class 6)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Select a mixture and pick the correct separation method!</p>
+      <div style="background:var(--bg-subtle);border-radius:var(--border-radius-xl);padding:var(--space-xl);margin-bottom:var(--space-lg);">
+        <div style="font-size:3rem;margin-bottom:var(--space-sm);" id="mix-icon">🌾</div>
+        <div style="font-weight:800;font-size:1.2rem;" id="mix-name">Wheat Grains + Chaff</div>
+        <div style="color:var(--text-muted);font-size:0.9rem;" id="mix-desc">Husk/chaff is lighter than solid wheat grains.</div>
+      </div>
+      <div style="margin-bottom:var(--space-lg);">
+        <div style="font-weight:700;margin-bottom:var(--space-sm);">Choose Mixture:</div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('mix-icon').textContent='🌾';
+            document.getElementById('mix-name').textContent='Wheat Grains + Chaff';
+            document.getElementById('mix-desc').textContent='Husk/chaff is lighter than solid wheat grains.';
+            document.getElementById('mix-correct').textContent='Winnowing (Wind blowing)';
+          ">🌾 Wheat + Chaff</button>
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('mix-icon').textContent='🧲';
+            document.getElementById('mix-name').textContent='Iron Filing + Sand';
+            document.getElementById('mix-desc').textContent='Iron is magnetic; sand is non-magnetic.';
+            document.getElementById('mix-correct').textContent='Magnetic Separation';
+          ">🧲 Iron + Sand</button>
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('mix-icon').textContent='☕';
+            document.getElementById('mix-name').textContent='Tea Leaves + Tea Liquid';
+            document.getElementById('mix-desc').textContent='Solid tea leaves remain on strainer while fluid passes.';
+            document.getElementById('mix-correct').textContent='Filtration / Strainer';
+          ">☕ Tea Leaves + Liquid</button>
+        </div>
+      </div>
+      <div style="background:var(--color-primary-light);padding:var(--space-md);border-radius:var(--border-radius-lg);">
+        <div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">RECOMMENDED SEPARATION METHOD</div>
+        <div style="font-size:1.4rem;font-weight:900;color:var(--color-primary-dark);" id="mix-correct">Winnowing (Wind blowing)</div>
+      </div>
+    </div>
+  `;
+};
+
+AppRouter._labFriction = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🛷 Friction & Surface Resistance Lab (Class 7)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Test how different surfaces oppose the motion of a sliding wooden block.</p>
+      <div style="background:var(--bg-subtle);border-radius:var(--border-radius-xl);padding:var(--space-xl);height:180px;position:relative;display:flex;align-items:flex-end;overflow:hidden;">
+        <div id="friction-block" style="width:60px;height:40px;background:#b45309;color:#fff;font-weight:800;border-radius:6px;display:flex;align-items:center;justify-content:center;position:absolute;left:20px;bottom:20px;transition:left 1.2s cubic-bezier(0.25, 1, 0.5, 1);">📦 1 kg</div>
+        <div id="surface-track" style="position:absolute;bottom:0;left:0;right:0;height:20px;background:#cbd5e1;transition:background 0.4s;"></div>
+      </div>
+      <div style="margin-bottom:var(--space-lg);">
+        <div style="font-weight:700;margin-bottom:var(--space-sm);">Choose Surface Type:</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('surface-track').style.background='#bae6fd';
+            document.getElementById('f-coeff').textContent='0.05 (Very Low)';
+            document.getElementById('f-dist').textContent='280 cm';
+            document.getElementById('friction-block').style.left='20px';
+            setTimeout(() => document.getElementById('friction-block').style.left='320px', 50);
+          ">🧊 Ice Surface</button>
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('surface-track').style.background='#fde68a';
+            document.getElementById('f-coeff').textContent='0.30 (Medium)';
+            document.getElementById('f-dist').textContent='160 cm';
+            document.getElementById('friction-block').style.left='20px';
+            setTimeout(() => document.getElementById('friction-block').style.left='180px', 50);
+          ">🪵 Polished Wood</button>
+          <button class="btn btn-outline btn-sm" onclick="
+            document.getElementById('surface-track').style.background='#fdba74';
+            document.getElementById('f-coeff').textContent='0.75 (High)';
+            document.getElementById('f-dist').textContent='75 cm';
+            document.getElementById('friction-block').style.left='20px';
+            setTimeout(() => document.getElementById('friction-block').style.left='95px', 50);
+          ">🏜️ Sandpaper / Rough</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:var(--space-md);justify-content:center;background:var(--color-primary-light);padding:var(--space-md);border-radius:var(--border-radius-lg);">
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">COEFFICIENT (μ)</div><div style="font-weight:900;font-size:1.2rem;color:var(--color-primary-dark);" id="f-coeff">0.30 (Medium)</div></div>
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">SLIDE DISTANCE</div><div style="font-weight:900;font-size:1.2rem;color:var(--color-primary-dark);" id="f-dist">160 cm</div></div>
+      </div>
+    </div>
+  `;
+};
+
+AppRouter._labPhotosynthesis = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🍃 Photosynthesis Oxygen Rate Lab (Class 7)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Increase light intensity to watch oxygen (O₂) bubbles release from the aquatic plant leaf!</p>
+      <div style="background:linear-gradient(180deg,#ecfdf5,#d1fae5);border-radius:var(--border-radius-xl);padding:var(--space-xl);height:200px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <div id="plant-leaf" style="font-size:4rem;z-index:2;">🍃</div>
+        <div id="bubble-container" style="position:absolute;inset:0;pointer-events:none;"></div>
+      </div>
+      <div style="margin-top:var(--space-lg);">
+        <label class="form-label">Sunlight Intensity: <strong id="light-val">50</strong>%</label>
+        <input type="range" min="0" max="100" value="50" style="width:100%;accent-color:var(--color-primary);" oninput="
+          const val = parseInt(this.value);
+          document.getElementById('light-val').textContent = val;
+          const rate = Math.round(val * 0.8);
+          document.getElementById('o2-rate').textContent = rate;
+          const container = document.getElementById('bubble-container');
+          container.innerHTML = '';
+          const count = Math.floor(val / 10);
+          for (let i = 0; i < count; i++) {
+            const b = document.createElement('div');
+            b.innerHTML = '🫧';
+            b.style.cssText = 'position:absolute;bottom:40px;left:' + (35 + Math.random()*30) + '%;font-size:1.2rem;animation:riseBubble ' + (1.5 - (val/120)) + 's infinite ease-in;animation-delay:' + (i*0.15) + 's;';
+            container.appendChild(b);
+          }
+        ">
+      </div>
+      <style>@keyframes riseBubble { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-120px); opacity: 0; } }</style>
+      <div style="margin-top:var(--space-lg);background:var(--color-primary-light);padding:var(--space-md);border-radius:var(--border-radius-lg);display:flex;justify-content:center;gap:var(--space-xl);">
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">O₂ PRODUCTION RATE</div><div style="font-size:1.6rem;font-weight:900;color:var(--color-primary-dark);"><span id="o2-rate">40</span> bubbles/min</div></div>
+      </div>
+    </div>
+  `;
+};
+
+AppRouter._labSoundWaves = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🔊 Sound Waves, Frequency & Pitch Lab (Class 8)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Adjust Frequency (Pitch) and Amplitude (Loudness) to visualize sound wave oscillations!</p>
+      <div style="background:#0f172a;border-radius:var(--border-radius-xl);padding:var(--space-lg);height:180px;display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 400 120" style="width:100%;height:100%;">
+          <path id="sound-wave-path" d="M 0 60 Q 25 20, 50 60 T 100 60 T 150 60 T 200 60 T 250 60 T 300 60 T 350 60 T 400 60" fill="none" stroke="#10b981" stroke-width="3"/>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-top:var(--space-lg);">
+        <div>
+          <label class="form-label">Frequency / Pitch (Hz): <strong id="freq-val">440</strong> Hz</label>
+          <input type="range" min="100" max="1000" value="440" style="width:100%;accent-color:var(--color-primary);" oninput="
+            document.getElementById('freq-val').textContent = this.value;
+            const f = parseInt(this.value);
+            const a = parseInt(document.getElementById('amp-slider').value);
+            let d = 'M 0 60';
+            const step = Math.max(10, 400 / (f / 50));
+            for (let x = 0; x <= 400; x += step) {
+              const y = 60 + ((x / step) % 2 === 0 ? -a : a);
+              d += ' Q ' + (x + step/2) + ' ' + y + ', ' + (x + step) + ' 60';
+            }
+            document.getElementById('sound-wave-path').setAttribute('d', d);
+          ">
+        </div>
+        <div>
+          <label class="form-label">Amplitude / Loudness (dB): <strong id="amp-val">30</strong> dB</label>
+          <input type="range" id="amp-slider" min="5" max="50" value="30" style="width:100%;accent-color:var(--color-primary);" oninput="
+            document.getElementById('amp-val').textContent = this.value;
+            const f = parseInt(document.getElementById('freq-val').textContent || 440);
+            const a = parseInt(this.value);
+            let d = 'M 0 60';
+            const step = Math.max(10, 400 / (f / 50));
+            for (let x = 0; x <= 400; x += step) {
+              const y = 60 + ((x / step) % 2 === 0 ? -a : a);
+              d += ' Q ' + (x + step/2) + ' ' + y + ', ' + (x + step) + ' 60';
+            }
+            document.getElementById('sound-wave-path').setAttribute('d', d);
+          ">
+        </div>
+      </div>
+      <div style="margin-top:var(--space-md);padding:var(--space-md);background:var(--bg-highlight);border-radius:var(--border-radius-lg);text-align:left;">
+        <strong>📖 Key Concept:</strong> Higher <strong>Frequency</strong> = Higher Pitch (Sharper Sound). Higher <strong>Amplitude</strong> = Greater Loudness!
+      </div>
+    </div>
+  `;
+};
+
+AppRouter._labDensityFlotation = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🚢 Density & Flotation Lab (Class 9)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">An object floats if its density is less than the liquid density (ρ_object < ρ_liquid)!</p>
+      <div style="background:var(--bg-subtle);border-radius:var(--border-radius-xl);padding:var(--space-xl);height:200px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <div id="fluid-fill" style="position:absolute;bottom:0;left:0;right:0;height:140px;background:#7dd3fc;transition:background 0.5s;"></div>
+        <div id="float-object" style="width:60px;height:60px;background:#f59e0b;border-radius:8px;position:absolute;left:calc(50% - 30px);bottom:110px;transition:bottom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;box-shadow:0 4px 10px rgba(0,0,0,0.2);">📦 Object</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-top:var(--space-lg);">
+        <div>
+          <label class="form-label">Object Density: <strong id="obj-den-val">0.8</strong> g/cm³</label>
+          <input type="range" min="0.2" max="2.5" step="0.1" value="0.8" style="width:100%;accent-color:var(--color-primary);" oninput="
+            const od = parseFloat(this.value);
+            document.getElementById('obj-den-val').textContent = od;
+            const ld = parseFloat(document.getElementById('liq-den-val').textContent);
+            const obj = document.getElementById('float-object');
+            if (od < ld) {
+              obj.style.bottom = Math.round(140 - (od/ld)*60) + 'px';
+              document.getElementById('float-status').textContent = '🟢 FLOATING (Buoyant Force > Weight)';
+            } else {
+              obj.style.bottom = '10px';
+              document.getElementById('float-status').textContent = '🔴 SINKING (Weight > Buoyant Force)';
+            }
+          ">
+        </div>
+        <div>
+          <label class="form-label">Liquid Type:</label>
+          <select class="form-select" onchange="
+            const ld = parseFloat(this.value);
+            document.getElementById('liq-den-val').textContent = ld;
+            const colors = {'1.0':'#7dd3fc', '0.8':'#fef08a', '1.4':'#fcd34d'};
+            document.getElementById('fluid-fill').style.background = colors[this.value] || '#7dd3fc';
+            const od = parseFloat(document.getElementById('obj-den-val').textContent);
+            const obj = document.getElementById('float-object');
+            if (od < ld) {
+              obj.style.bottom = Math.round(140 - (od/ld)*60) + 'px';
+              document.getElementById('float-status').textContent = '🟢 FLOATING (Buoyant Force > Weight)';
+            } else {
+              obj.style.bottom = '10px';
+              document.getElementById('float-status').textContent = '🔴 SINKING (Weight > Buoyant Force)';
+            }
+          ">
+            <option value="1.0">💧 Pure Water (1.0 g/cm³)</option>
+            <option value="0.8">🛢️ Cooking Oil (0.8 g/cm³)</option>
+            <option value="1.4">🍯 Honey / Syrup (1.4 g/cm³)</option>
+          </select>
+          <span style="display:none;" id="liq-den-val">1.0</span>
+        </div>
+      </div>
+      <div id="float-status" style="margin-top:var(--space-md);font-weight:800;font-size:1.1rem;color:var(--color-primary-dark);">🟢 FLOATING (Buoyant Force > Weight)</div>
+    </div>
+  `;
+};
+
+AppRouter._labLensOptics = function() {
+  return `
+    <div class="card" style="max-width:680px;margin:0 auto;text-align:center;">
+      <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🔍 Convex Lens Ray Optics Simulator (Class 10)</h3>
+      <p style="color:var(--text-muted);margin-bottom:var(--space-lg);">Drag object position (u) relative to focal length (f = 20 cm) to observe image distance (v) and magnification!</p>
+      <div style="background:#0f172a;border-radius:var(--border-radius-xl);padding:var(--space-lg);height:180px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <!-- Principal Axis -->
+        <div style="position:absolute;top:50%;left:0;right:0;height:2px;background:#475569;"></div>
+        <!-- Convex Lens Symbol -->
+        <div style="position:absolute;top:20px;bottom:20px;left:50%;width:16px;background:rgba(56,189,248,0.3);border:2px solid #38bdf8;border-radius:50%;transform:translateX(-50%);"></div>
+        <!-- Object Arrow -->
+        <div id="opt-obj" style="position:absolute;bottom:50%;left:80px;width:4px;height:40px;background:#f59e0b;transform-origin:bottom center;"></div>
+        <!-- Image Arrow -->
+        <div id="opt-img" style="position:absolute;top:50%;right:80px;width:4px;height:40px;background:#10b981;transform-origin:top center;"></div>
+      </div>
+      <div style="margin-top:var(--space-lg);">
+        <label class="form-label">Object Distance (u): <strong id="u-val">40</strong> cm</label>
+        <input type="range" min="10" max="80" value="40" style="width:100%;accent-color:var(--color-primary);" oninput="
+          const u = parseInt(this.value);
+          document.getElementById('u-val').textContent = u;
+          const f = 20;
+          const obj = document.getElementById('opt-obj');
+          const img = document.getElementById('opt-img');
+          obj.style.left = Math.round(200 - u*2) + 'px';
+          if (u === f) {
+            document.getElementById('opt-nature').textContent = 'Image formed at Infinity (Parallel Rays)';
+            img.style.display = 'none';
+          } else {
+            img.style.display = 'block';
+            const v = (u * f) / (u - f);
+            const m = (-v / u).toFixed(2);
+            document.getElementById('opt-v').textContent = v > 0 ? v.toFixed(1) + ' cm' : 'Virtual behind lens';
+            document.getElementById('opt-m').textContent = m;
+            document.getElementById('opt-nature').textContent = u > f ? 'Real & Inverted Image' : 'Virtual & Erect Image';
+          }
+        ">
+      </div>
+      <div style="display:flex;gap:var(--space-md);justify-content:center;background:var(--color-primary-light);padding:var(--space-md);border-radius:var(--border-radius-lg);margin-top:var(--space-md);">
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">IMAGE DISTANCE (v)</div><div style="font-weight:900;font-size:1.2rem;color:var(--color-primary-dark);" id="opt-v">40.0 cm</div></div>
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">MAGNIFICATION (m)</div><div style="font-weight:900;font-size:1.2rem;color:var(--color-primary-dark);" id="opt-m">-1.00</div></div>
+        <div><div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;">IMAGE NATURE</div><div style="font-weight:900;font-size:1.1rem;color:var(--color-primary-dark);" id="opt-nature">Real & Inverted Image</div></div>
+      </div>
+    </div>
+  `;
+};
+
 AppRouter._labPendulum = function() {
+
   return `
     <div class="card" style="max-width:650px;margin:0 auto;text-align:center;">
       <h3 style="font-weight:800;font-size:1.3rem;margin-bottom:var(--space-md);color:var(--color-primary-dark);">🔩 Simple Pendulum Simulation</h3>
