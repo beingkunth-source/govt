@@ -373,7 +373,7 @@ auth: {
       }
 
       // Dynamic Route Redirection if logged out or role unauthorized
-      const teacherOnlyRoutes = ['teacher', 'classes-manage', 'upload-center', 'builder', 'assign', 'preview'];
+      const teacherOnlyRoutes = ['teacher', 'classes-manage', 'upload-center', 'builder', 'assign'];
 
       if (!this.auth.isLoggedIn && !['home', 'login', 'register'].includes(this.currentRoute)) {
         this.currentRoute = 'login';
@@ -3466,12 +3466,23 @@ async renderProgress(main) {
     }
 
     const t = res.topic;
+    const isTeacher = this.auth.isLoggedIn && this.auth.role === 'teacher';
 
-    main.innerHTML = `
-      <div class="preview-banner" style="margin-bottom: var(--space-md);">
+    const bannerHtml = isTeacher ? `
+      <div class="preview-banner" style="margin-bottom: var(--space-md); display: flex; justify-content: space-between; align-align: center; background: #065f46; color: #fff; padding: 12px 16px; border-radius: 8px;">
         <span>👁️ TEACHER PREVIEW SIMULATOR (Read-Only Student Experience)</span>
         <button class="btn btn-sm btn-outline" style="color: #fff; border-color: #fff;" onclick="AppRouter.navigate('builder/${t.id}')">← Exit Preview & Edit</button>
       </div>
+    ` : `
+      <div class="preview-banner" style="margin-bottom: var(--space-md); display: flex; justify-content: space-between; align-items: center; background: #047857; color: #fff; padding: 12px 16px; border-radius: 8px;">
+        <span>📚 ASSIGNED LEARNING TOPIC</span>
+        <button class="btn btn-sm btn-outline" style="color: #fff; border-color: #fff;" onclick="AppRouter.navigate('dashboard')">← Back to Dashboard</button>
+      </div>
+    `;
+
+    main.innerHTML = `
+      ${bannerHtml}
+
 
       <div class="lesson-container">
         <div class="lesson-header">
