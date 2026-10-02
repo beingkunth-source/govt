@@ -36,25 +36,28 @@ auth: {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === 'object') {
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          Boolean(parsed.isLoggedIn) &&
+          ['student', 'teacher'].includes(parsed.role) &&
+          parsed.name
+        ) {
           this.auth = {
-            isLoggedIn: Boolean(parsed.isLoggedIn),
-            role: parsed.role || null,
-            name: parsed.name || '',
+            isLoggedIn: true,
+            role: parsed.role,
+            name: parsed.name,
             selectedClass: parseInt(parsed.selectedClass) || 8,
             userId: parsed.userId || null,
             email: parsed.email || ''
           };
-        } else {
-          this.resetAuthSession();
+          return;
         }
       } catch(e) {
         console.error('Failed to parse auth session:', e);
-        this.resetAuthSession();
       }
-    } else {
-      this.resetAuthSession();
     }
+    this.resetAuthSession();
   },
 
   resetAuthSession() {

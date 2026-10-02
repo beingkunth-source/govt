@@ -261,7 +261,6 @@ body.low-data-mode .banner-graphic {
   transition: all 0.2s ease;
 }
 
-.login-nav-item,
 .teacher-nav,
 .student-nav {
   display: none;
