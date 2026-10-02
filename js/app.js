@@ -159,8 +159,6 @@ auth: {
 },
 
   async loginAsStudent(email, password) {
-  try {
-  async loginAsStudent(email, password) {
     try {
       let result = null;
       try {
@@ -313,38 +311,6 @@ auth: {
     this.saveAuthSession();
     this.navigate('teacher');
   },
-      alert('No authentication token received.');
-      return;
-    }
-
-    const user = result.user;
-
-    this.auth = {
-      isLoggedIn: true,
-      role: 'teacher',
-      name: user.name,
-      selectedClass: null,
-      userId: user.id,
-      email: user.email
-    };
-
-    localStorage.setItem(
-      'shiksha_auth_session',
-      JSON.stringify(this.auth)
-    );
-
-    window.location.hash = '#teacher';
-
-  } catch (error) {
-
-    console.error(
-      'Quick Demo Teacher Login Error:',
-      error
-    );
-
-    alert('Quick Demo teacher login failed.');
-  }
-},
 
   logout() {
     try {
