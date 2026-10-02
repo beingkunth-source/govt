@@ -261,6 +261,12 @@ body.low-data-mode .banner-graphic {
   transition: all 0.2s ease;
 }
 
+.login-nav-item,
+.teacher-nav,
+.student-nav {
+  display: none;
+}
+
 .nav-link:hover {
   background-color: var(--bg-subtle);
   color: var(--color-primary);

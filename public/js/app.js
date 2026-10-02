@@ -35,11 +35,39 @@ auth: {
     const saved = localStorage.getItem('shiksha_auth_session');
     if (saved) {
       try {
-        this.auth = JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          this.auth = {
+            isLoggedIn: Boolean(parsed.isLoggedIn),
+            role: parsed.role || null,
+            name: parsed.name || '',
+            selectedClass: parseInt(parsed.selectedClass) || 8,
+            userId: parsed.userId || null,
+            email: parsed.email || ''
+          };
+        } else {
+          this.resetAuthSession();
+        }
       } catch(e) {
         console.error('Failed to parse auth session:', e);
+        this.resetAuthSession();
       }
+    } else {
+      this.resetAuthSession();
     }
+  },
+
+  resetAuthSession() {
+    this.auth = {
+      isLoggedIn: false,
+      role: null,
+      name: '',
+      selectedClass: null,
+      userId: null,
+      email: ''
+    };
+    localStorage.removeItem('shiksha_auth_session');
+    localStorage.removeItem('shiksha_jwt');
   },
 
   saveAuthSession() {
@@ -49,38 +77,40 @@ auth: {
 
   updateHeaderAuthUI() {
     const container = document.getElementById('header-auth-controls');
-    const isLoggedIn = this.auth.isLoggedIn;
+    const isLoggedIn = Boolean(this.auth && this.auth.isLoggedIn);
     const isTeacher = isLoggedIn && this.auth.role === 'teacher';
 
     // 1. Toggle Login nav item in sidebar: Hide when logged in, show when logged out
     document.querySelectorAll('.login-nav-item').forEach(el => {
-      el.style.display = isLoggedIn ? 'none' : '';
+      el.style.display = isLoggedIn ? 'none' : 'block';
     });
 
     // 2. Toggle Teacher vs Student nav links strictly based on authenticated role
     document.querySelectorAll('.teacher-nav').forEach(el => {
-      el.style.display = isTeacher ? '' : 'none';
+      el.style.display = isTeacher ? 'block' : 'none';
     });
     document.querySelectorAll('.student-nav').forEach(el => {
-      el.style.display = (isLoggedIn && !isTeacher) ? '' : 'none';
+      el.style.display = (isLoggedIn && !isTeacher) ? 'block' : 'none';
     });
 
     if (!container) return;
 
     if (isLoggedIn) {
       const roleBadge = isTeacher ? '👨‍🏫 Teacher' : '👨‍🎓 Student';
+      const labelText = typeof t === 'function' ? t('nav_logout') : 'Logout';
       container.innerHTML = `
         <div class="chip chip-primary" style="font-size: 0.85rem; padding: 4px 10px;">
-          ${roleBadge}: ${this.auth.name} (${isTeacher ? 'Headmaster' : 'Class ' + this.auth.selectedClass})
+          ${roleBadge}: ${this.auth.name} (${isTeacher ? 'Headmaster' : 'Class ' + (this.auth.selectedClass || 8)})
         </div>
         <button class="btn btn-outline btn-sm" onclick="AppRouter.logout()" title="Logout">
-          🚪 <span data-i18n="nav_logout">${t('nav_logout')}</span>
+          🚪 <span data-i18n="nav_logout">${labelText}</span>
         </button>
       `;
     } else {
+      const labelText = typeof t === 'function' ? t('nav_login') : 'Login';
       container.innerHTML = `
         <button class="btn btn-primary btn-sm" onclick="AppRouter.navigate('login')" title="Login">
-          🔑 <span data-i18n="nav_login">${t('nav_login')}</span>
+          🔑 <span data-i18n="nav_login">${labelText}</span>
         </button>
       `;
     }
