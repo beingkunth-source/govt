@@ -65,3 +65,9 @@ const LanguageManager = {
 function t(key) {
   return LanguageManager.get(key);
 }
+
+if (typeof window !== 'undefined') {
+  window.LanguageManager = LanguageManager;
+  window.t = t;
+}
+

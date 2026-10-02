@@ -839,3 +839,7 @@ const ProgressTracker = {
   }
 
 };
+
+if (typeof window !== 'undefined') {
+  window.ProgressTracker = ProgressTracker;
+}

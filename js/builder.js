@@ -273,3 +273,8 @@ const AuthoringEngine = {
 
 // Initialize Authoring Engine
 AuthoringEngine.init();
+
+if (typeof window !== 'undefined') {
+  window.AuthoringEngine = AuthoringEngine;
+}
+

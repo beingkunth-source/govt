@@ -731,15 +731,19 @@
 
   <script>
     function bootApp() {
-      if (typeof LanguageManager !== 'undefined') LanguageManager.init();
-      if (typeof AccessibilityManager !== 'undefined') AccessibilityManager.init();
-      if (typeof ProgressTracker !== 'undefined') ProgressTracker.init();
-      if (typeof AppRouter !== 'undefined') AppRouter.init();
-      if (typeof SyncManager !== 'undefined') SyncManager.init();
+      try { if (typeof LanguageManager !== 'undefined' && LanguageManager.init) LanguageManager.init(); } catch(e) { console.error('LanguageManager init failed:', e); }
+      try { if (typeof AccessibilityManager !== 'undefined' && AccessibilityManager.init) AccessibilityManager.init(); } catch(e) { console.error('AccessibilityManager init failed:', e); }
+      try { if (typeof ProgressTracker !== 'undefined' && ProgressTracker.init) ProgressTracker.init(); } catch(e) { console.error('ProgressTracker init failed:', e); }
+      try { if (typeof AuthoringEngine !== 'undefined' && AuthoringEngine.init) AuthoringEngine.init(); } catch(e) { console.error('AuthoringEngine init failed:', e); }
+      try { if (typeof AppRouter !== 'undefined' && AppRouter.init) AppRouter.init(); } catch(e) { console.error('AppRouter init failed:', e); }
+      try { if (typeof SyncManager !== 'undefined' && SyncManager.init) SyncManager.init(); } catch(e) { console.error('SyncManager init failed:', e); }
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
-          .then(registration => console.log('Shiksha Setu ServiceWorker registered:', registration.scope))
+          .then(registration => {
+            console.log('Shiksha Setu ServiceWorker registered:', registration.scope);
+            if (registration.update) registration.update();
+          })
           .catch(error => console.log('ServiceWorker registration failed:', error));
       }
     }
@@ -750,6 +754,7 @@
       bootApp();
     }
   </script>
+
 
 </body>
 

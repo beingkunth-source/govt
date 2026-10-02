@@ -1747,3 +1747,8 @@ const SHIKSHA_DATA = {
     }
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.SHIKSHA_DATA = SHIKSHA_DATA;
+}
+

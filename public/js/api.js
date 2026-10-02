@@ -827,13 +827,8 @@ const ApiClient = {
   // HEALTH CHECK
   // =========================================================
 
-  async health() {
-
-    return this.request(
-      'GET',
-      '/health'
-    );
-
-  }
-
 };
+
+if (typeof window !== 'undefined') {
+  window.ApiClient = ApiClient;
+}

@@ -463,3 +463,8 @@ const QuizEngine = {
     }
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.QuizEngine = QuizEngine;
+}
+

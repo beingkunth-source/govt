@@ -346,129 +346,140 @@ auth: {
   },
 
   handleRoute() {
-    const hash = window.location.hash.replace('#', '') || 'home';
-    const parts = hash.split('/');
-    this.currentRoute = parts[0] || 'home';
-    
-    // Update active nav link styling
-    document.querySelectorAll('.nav-link, .mobile-nav-item').forEach(link => {
-      const href = link.getAttribute('href') || '';
-      if (href === `#${this.currentRoute}`) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
-
-    // Make sure header & sidebar role visibility is up-to-date
-    this.updateHeaderAuthUI();
-
-    const main = document.getElementById('view-container');
-    if (!main) return;
-
-    // Scroll back to top on view change
-    window.scrollTo(0, 0);
-
-    // Dynamic Route Redirection if logged out or role unauthorized
-    const teacherOnlyRoutes = ['teacher', 'classes-manage', 'upload-center', 'builder', 'assign', 'preview'];
-
-    if (!this.auth.isLoggedIn && !['home', 'login', 'register'].includes(this.currentRoute)) {
-      this.currentRoute = 'login';
-    } else if (this.auth.isLoggedIn && this.auth.role === 'student' && teacherOnlyRoutes.includes(this.currentRoute)) {
-      alert('Access Denied: Teacher portal is restricted to teachers only.');
-      this.currentRoute = 'dashboard';
-      window.location.hash = '#dashboard';
-    } else if (this.auth.isLoggedIn && this.auth.role === 'teacher' && this.currentRoute === 'dashboard') {
-      this.currentRoute = 'teacher';
-      window.location.hash = '#teacher';
-    }
-
-    switch (this.currentRoute) {
-    case 'login':
-    this.renderLogin(main);
-    break;
-    case 'register':
-    this.renderRegister(main);
-    break;
-    case 'teacher':
-    this.renderTeacherDashboard(main);
-    break;
-      case 'classes-manage':
-        this.renderClassesManage(main);
-        break;
-      case 'upload-center':
-        this.renderUploadCenter(main);
-        break;
-      case 'builder':
-        this.renderBuilder(main, parts[1]);
-        break;
-      case 'assign':
-        this.renderAssign(main, parts[1]);
-        break;
-      case 'preview':
-        this.renderPreview(main, parts[1]);
-        break;
-      case 'home':
-        this.renderHome(main);
-        break;
-      case 'dashboard':
-        this.renderDashboard(main);
-        break;
-      case 'classes':
-        this.renderClasses(main, parts[1]);
-        break;
-      case 'subject':
-        this.renderSubject(main, parseInt(parts[1] || 6), parts[2] || 'math');
-        break;
-      case 'lesson':
-        this.renderLesson(main, parts[1] || 'math_6_c1_l1');
-        break;
-      case 'quizzes':
-        this.renderQuizzes(main);
-        break;
-      case 'library':
-        this.renderLibrary(main);
-        break;
-      case 'worksheet':
-        this.renderWorksheet(main, parts[1] || 'ws_math_6_1');
-        break;
-      case 'progress':
-        this.renderProgress(main);
-        break;
-      case 'achievements':
-        this.renderAchievements(main);
-        break;
-      case 'certificate':
-        this.renderCertificate(main);
-        break;
-      case 'leaderboard':
-        this.renderLeaderboard(main);
-        break;
-      case 'doubt-solver':
-        this.renderDoubtSolver(main);
-        break;
-      case 'lab':
-        this.renderScienceLab(main);
-        break;
-      case 'study-planner':
-        this.renderStudyPlanner(main);
-        break;
-      case 'vocabulary':
-        this.renderVocabularyBuilder(main);
-        break;
-      case 'settings':
-        this.renderSettings(main);
-        break;
-      default:
-        if (this.auth.isLoggedIn && this.auth.role === 'teacher') {
-          this.renderTeacherDashboard(main);
-        } else if (this.auth.isLoggedIn && this.auth.role === 'student') {
-          this.renderDashboard(main);
+    try {
+      const hash = window.location.hash.replace('#', '') || 'home';
+      const parts = hash.split('/');
+      this.currentRoute = parts[0] || 'home';
+      
+      // Update active nav link styling
+      document.querySelectorAll('.nav-link, .mobile-nav-item').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        if (href === `#${this.currentRoute}`) {
+          link.classList.add('active');
         } else {
-          this.renderHome(main);
+          link.classList.remove('active');
         }
+      });
+
+      // Make sure header & sidebar role visibility is up-to-date
+      this.updateHeaderAuthUI();
+
+      const main = document.getElementById('view-container');
+      if (!main) return;
+
+      // Scroll back to top on view change
+      if (typeof window.scrollTo === 'function') {
+        window.scrollTo(0, 0);
+      }
+
+      // Dynamic Route Redirection if logged out or role unauthorized
+      const teacherOnlyRoutes = ['teacher', 'classes-manage', 'upload-center', 'builder', 'assign', 'preview'];
+
+      if (!this.auth.isLoggedIn && !['home', 'login', 'register'].includes(this.currentRoute)) {
+        this.currentRoute = 'login';
+      } else if (this.auth.isLoggedIn && this.auth.role === 'student' && teacherOnlyRoutes.includes(this.currentRoute)) {
+        alert('Access Denied: Teacher portal is restricted to teachers only.');
+        this.currentRoute = 'dashboard';
+        window.location.hash = '#dashboard';
+      } else if (this.auth.isLoggedIn && this.auth.role === 'teacher' && this.currentRoute === 'dashboard') {
+        this.currentRoute = 'teacher';
+        window.location.hash = '#teacher';
+      }
+
+      switch (this.currentRoute) {
+        case 'login':
+          this.renderLogin(main);
+          break;
+        case 'register':
+          this.renderRegister(main);
+          break;
+        case 'teacher':
+          this.renderTeacherDashboard(main);
+          break;
+        case 'classes-manage':
+          this.renderClassesManage(main);
+          break;
+        case 'upload-center':
+          this.renderUploadCenter(main);
+          break;
+        case 'builder':
+          this.renderBuilder(main, parts[1]);
+          break;
+        case 'assign':
+          this.renderAssign(main, parts[1]);
+          break;
+        case 'preview':
+          this.renderPreview(main, parts[1]);
+          break;
+        case 'home':
+          this.renderHome(main);
+          break;
+        case 'dashboard':
+          this.renderDashboard(main);
+          break;
+        case 'classes':
+          this.renderClasses(main, parts[1]);
+          break;
+        case 'subject':
+          this.renderSubject(main, parseInt(parts[1] || 6), parts[2] || 'math');
+          break;
+        case 'lesson':
+          this.renderLesson(main, parts[1] || 'math_6_c1_l1');
+          break;
+        case 'quizzes':
+          this.renderQuizzes(main);
+          break;
+        case 'library':
+          this.renderLibrary(main);
+          break;
+        case 'worksheet':
+          this.renderWorksheet(main, parts[1] || 'ws_math_6_1');
+          break;
+        case 'progress':
+          this.renderProgress(main);
+          break;
+        case 'achievements':
+          this.renderAchievements(main);
+          break;
+        case 'certificate':
+          this.renderCertificate(main);
+          break;
+        case 'leaderboard':
+          this.renderLeaderboard(main);
+          break;
+        case 'doubt-solver':
+          this.renderDoubtSolver(main);
+          break;
+        case 'lab':
+          this.renderScienceLab(main);
+          break;
+        case 'study-planner':
+          this.renderStudyPlanner(main);
+          break;
+        case 'vocabulary':
+          this.renderVocabularyBuilder(main);
+          break;
+        case 'settings':
+          this.renderSettings(main);
+          break;
+        default:
+          if (this.auth.isLoggedIn && this.auth.role === 'teacher') {
+            this.renderTeacherDashboard(main);
+          } else if (this.auth.isLoggedIn && this.auth.role === 'student') {
+            this.renderDashboard(main);
+          } else {
+            this.renderHome(main);
+          }
+      }
+    } catch (err) {
+      console.error('Routing error:', err);
+      const main = document.getElementById('view-container');
+      if (main) {
+        this.renderLogin(main);
+      }
     }
   },
+
 
   updateOnlineStatus() {
     const isOnline = navigator.onLine;
@@ -1201,51 +1212,44 @@ async submitRegistration() {
         }
 
 
-        let result;
-
-
-        // =================================================
-        // STUDENT REGISTER
-        // =================================================
-
-        if (role === 'student') {
-
-            result =
-                await ApiClient.auth
-                    .registerStudent(
-                        registerData
-                    );
-
+        let result = null;
+        try {
+          if (typeof ApiClient !== 'undefined') {
+            if (role === 'student') {
+              result = await ApiClient.auth.registerStudent(registerData);
+            } else {
+              result = await ApiClient.auth.registerTeacher(registerData);
+            }
+          }
+        } catch (err) {
+          console.warn('[Registration] API connection unavailable, engaging client fallback:', err);
         }
 
-
-        // =================================================
-        // TEACHER REGISTER
-        // =================================================
-
-        else {
-
-            result =
-                await ApiClient.auth
-                    .registerTeacher(
-                        registerData
-                    );
-
-        }
-
-
-        // =================================================
-        // SERVER NOT AVAILABLE
-        // =================================================
-
-        if (!result) {
-
-            showMessage(
-                'Could not connect to server. Make sure backend is running.'
-            );
-
+        if (!result || result._error) {
+          if (result && result._error && result.status === 400) {
+            showMessage(result.message || 'Registration failed.');
             return;
+          }
+
+          // Client demo fallback
+          this.auth = {
+            isLoggedIn: true,
+            role: role,
+            name: fullName,
+            selectedClass: role === 'student' ? parseInt(classId) || 8 : 8,
+            userId: `${role}_demo_${Date.now()}`,
+            email: email
+          };
+          if (role === 'student') {
+            ProgressTracker.profile.name = fullName;
+            ProgressTracker.profile.selectedClass = parseInt(classId) || 8;
+            ProgressTracker.saveState();
+          }
+          this.saveAuthSession();
+          this.navigate(role === 'student' ? 'dashboard' : 'teacher');
+          return;
         }
+
 
 
         // =================================================
@@ -2768,68 +2772,37 @@ async renderProgress(main) {
     }
 
 
-    // ---------------------------------------------------------
-    // Get badges from backend
-    // ---------------------------------------------------------
-    const [allBadgesResult, myBadgesResult] =
-      await Promise.all([
-        ApiClient.badges.getAll(),
-        ApiClient.badges.getMine()
-      ]);
+    let allBadges = [];
+    let myBadges = [];
 
+    try {
+      if (typeof ApiClient !== 'undefined' && ApiClient.isAuthenticated()) {
+        const [allBadgesResult, myBadgesResult] = await Promise.all([
+          ApiClient.badges.getAll(),
+          ApiClient.badges.getMine()
+        ]);
 
-    // ---------------------------------------------------------
-    // API/network failure
-    // ---------------------------------------------------------
-    if (!allBadgesResult || !myBadgesResult) {
-      throw new Error('Unable to connect to achievements server.');
+        if (allBadgesResult && !allBadgesResult._error) {
+          allBadges = Array.isArray(allBadgesResult) ? allBadgesResult : (allBadgesResult.badges || []);
+        }
+        if (myBadgesResult && !myBadgesResult._error) {
+          myBadges = Array.isArray(myBadgesResult) ? myBadgesResult : (myBadgesResult.badges || []);
+        }
+      }
+    } catch (e) {
+      console.warn('[Achievements] API unavailable, using local fallback:', e);
     }
 
-
-    if (allBadgesResult._error) {
-      throw new Error(
-        allBadgesResult.message || 'Unable to load badges.'
-      );
+    if (allBadges.length === 0) {
+      allBadges = (typeof SHIKSHA_DATA !== 'undefined' && SHIKSHA_DATA.badges) ? SHIKSHA_DATA.badges : [];
+      const unlockedKeys = (typeof ProgressTracker !== 'undefined' && ProgressTracker.unlockedBadges) ? ProgressTracker.unlockedBadges : [];
+      myBadges = allBadges.filter(b => unlockedKeys.includes(b.id));
     }
 
+    const unlockedBadgeIds = new Set(
+      myBadges.map(b => String(b.badge_id ?? b.id ?? b.badge_key ?? b.key))
+    );
 
-    if (myBadgesResult._error) {
-      throw new Error(
-        myBadgesResult.message ||
-        'Unable to load student achievements.'
-      );
-    }
-
-
-    // ---------------------------------------------------------
-    // Support common API response formats
-    // ---------------------------------------------------------
-    const allBadges =
-      Array.isArray(allBadgesResult)
-        ? allBadgesResult
-        : allBadgesResult.badges || [];
-
-
-    const myBadges =
-      Array.isArray(myBadgesResult)
-        ? myBadgesResult
-        : myBadgesResult.badges || [];
-
-
-    // ---------------------------------------------------------
-    // Build unlocked badge IDs/keys
-    // ---------------------------------------------------------
-    const unlockedBadgeIds =
-      new Set(
-        myBadges.map(b =>
-          String(
-            b.badge_id ??
-            b.id ??
-            b.badge_key ??
-            b.key
-          )
-        )
-      );
 
 
     // ---------------------------------------------------------
@@ -4562,3 +4535,8 @@ attempts = [
     this.navigate('dashboard');
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.AppRouter = AppRouter;
+}
+

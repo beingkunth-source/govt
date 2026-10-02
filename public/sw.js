@@ -3,7 +3,7 @@
    Network First Strategy with Automatic Cache Busting
    ========================================================================== */
 
-const CACHE_NAME = 'shiksha-setu-cache-v4';
+const CACHE_NAME = 'shiksha-setu-cache-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

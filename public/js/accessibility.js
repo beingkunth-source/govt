@@ -96,3 +96,8 @@ const AccessibilityManager = {
     }
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.AccessibilityManager = AccessibilityManager;
+}
+
