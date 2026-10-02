@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Shiksha Setu - Free, Accessible E-Learning Platform for Government School Students (Classes 6-10)"
+  >
+
+  <meta
+    name="theme-color"
+    content="#059669"
+  >
+
+  <title>
+    Shiksha Setu | Govt School E-Learning Portal
+  </title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+</head>
+
+
+<body>
+
+  <!-- =====================================================
+       TOP APPLICATION HEADER
+  ====================================================== -->
+
+  <header class="app-header">
+
+    <div class="brand-container">
+
+      <div style="font-size: 1.8rem;">
+        🏛️
+      </div>
+
+      <div class="brand-title">
+
+        <span data-i18n="app_title">
+          Shiksha Setu
+        </span>
+
+        <span
+          class="brand-subtitle"
+          data-i18n="app_tagline"
+        >
+          Govt School E-Learning Platform
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <!-- Online / Offline Status -->
+      <span
+        id="online-status-badge"
+        class="status-badge"
+      >
+
+        <span class="status-dot"></span>
+
+        🟢 Online
+
+      </span>
+
+
+      <!-- Login / Logout / User -->
+      <div
+        id="header-auth-controls"
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        "
+      >
+      </div>
+
+
+      <!-- Language Selector -->
+      <select
+        class="form-select lang-selector"
+        onchange="LanguageManager.setLanguage(this.value)"
+        aria-label="Select Language"
+        style="
+          width: auto;
+          padding: 4px 8px;
+          min-height: 36px;
+        "
+      >
+
+        <option value="en">
+          🇬🇧 English
+        </option>
+
+        <option value="hi">
+          🇮🇳 हिंदी
+        </option>
+
+        <option value="mr">
+          🇮🇳 मराठी
+        </option>
+
+      </select>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       APPLICATION BODY
+  ====================================================== -->
+
+  <div class="app-body">
+
+
+    <!-- ===================================================
+         DESKTOP SIDEBAR
+    ==================================================== -->
+
+    <nav
+      class="app-sidebar"
+      aria-label="Main Navigation"
+    >
+
+      <ul class="nav-list">
+
+
+        <!-- ===============================================
+             LOGIN
+        ================================================ -->
+
+        <li class="login-nav-item">
+
+          <a
+            href="#login"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🔑
+            </span>
+
+            <span data-i18n="nav_login">
+              Login
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <!-- ===============================================
+             REGISTER
+        ================================================ -->
+
+        <li class="login-nav-item">
+
+          <a
+            href="#register"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📝
+            </span>
+
+            <span data-i18n="register_btn">
+              Register
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <!-- ===============================================
+             TEACHER NAVIGATION
+        ================================================ -->
+
+        <li class="teacher-nav">
+
+          <a
+            href="#teacher"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📋
+            </span>
+
+            <span>
+              Teacher Dashboard
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="teacher-nav">
+
+          <a
+            href="#classes-manage"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🏫
+            </span>
+
+            <span>
+              Create Class & Subject
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="teacher-nav">
+
+          <a
+            href="#builder"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🛠️
+            </span>
+
+            <span>
+              Page & Quiz Builder
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="teacher-nav">
+
+          <a
+            href="#upload-center"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📤
+            </span>
+
+            <span>
+              Upload Video & PDF Center
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="teacher-nav">
+
+          <a
+            href="#assign"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🎯
+            </span>
+
+            <span>
+              Assign to Students
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="teacher-nav">
+
+          <a
+            href="#preview"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              👁️
+            </span>
+
+            <span>
+              Preview as Student
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <!-- ===============================================
+             STUDENT NAVIGATION
+        ================================================ -->
+
+        <li class="student-nav">
+
+          <a
+            href="#dashboard"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📊
+            </span>
+
+            <span data-i18n="nav_dashboard">
+              Student Dashboard
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#classes"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🏫
+            </span>
+
+            <span data-i18n="nav_classes">
+              Classes
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#quizzes"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              ✍️
+            </span>
+
+            <span data-i18n="nav_quizzes">
+              Quizzes
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#library"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📚
+            </span>
+
+            <span data-i18n="nav_library">
+              Digital Library
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#progress"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📈
+            </span>
+
+            <span data-i18n="nav_progress">
+              Progress
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#achievements"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              🏆
+            </span>
+
+            <span data-i18n="nav_achievements">
+              Achievements
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <li class="student-nav">
+
+          <a
+            href="#certificate"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              📜
+            </span>
+
+            <span>
+              Certificate
+            </span>
+
+          </a>
+
+        </li>
+
+        <li class="student-nav">
+          <a href="#leaderboard" class="nav-link">
+            <span class="nav-icon">🏅</span>
+            <span>Leaderboard</span>
+          </a>
+        </li>
+
+        <li class="student-nav">
+          <a href="#doubt-solver" class="nav-link">
+            <span class="nav-icon">🤖</span>
+            <span>AI Doubt Solver</span>
+          </a>
+        </li>
+
+        <li class="student-nav">
+          <a href="#lab" class="nav-link">
+            <span class="nav-icon">🔬</span>
+            <span>Science Lab</span>
+          </a>
+        </li>
+
+        <li class="student-nav">
+          <a href="#study-planner" class="nav-link">
+            <span class="nav-icon">📅</span>
+            <span>Study Planner</span>
+          </a>
+        </li>
+
+        <li class="student-nav">
+          <a href="#vocabulary" class="nav-link">
+            <span class="nav-icon">📖</span>
+            <span>Vocabulary</span>
+          </a>
+        </li>
+
+
+        <!-- ===============================================
+             SETTINGS
+        ================================================ -->
+
+        <li class="auth-nav-item">
+
+          <a
+            href="#settings"
+            class="nav-link"
+          >
+
+            <span class="nav-icon">
+              ⚙️
+            </span>
+
+            <span data-i18n="nav_settings">
+              Settings
+            </span>
+
+          </a>
+
+        </li>
+
+      </ul>
+
+    </nav>
+
+
+    <!-- ===================================================
+         MAIN SPA CONTENT
+    ==================================================== -->
+
+    <main
+      id="view-container"
+      class="main-content"
+      tabindex="-1"
+    >
+
+      <!--
+        Dynamic views rendered by app.js
+
+        #login
+        #register
+        #dashboard
+        #teacher
+        #classes
+        etc.
+      -->
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================================
+       MOBILE BOTTOM NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="mobile-nav"
+    aria-label="Mobile Navigation"
+  >
+
+
+    <!-- LOGIN -->
+
+    <a
+      href="#login"
+      class="mobile-nav-item login-nav-item"
+    >
+
+      <span>
+        🔑
+      </span>
+
+      <span data-i18n="nav_login">
+        Login
+      </span>
+
+    </a>
+
+
+    <!-- REGISTER -->
+
+    <a
+      href="#register"
+      class="mobile-nav-item login-nav-item"
+    >
+
+      <span>
+        📝
+      </span>
+
+      <span data-i18n="register_btn">
+        Register
+      </span>
+
+    </a>
+
+
+    <!-- =================================================
+         TEACHER MOBILE LINKS
+    ================================================== -->
+
+    <a
+      href="#teacher"
+      class="mobile-nav-item teacher-nav"
+    >
+
+      <span>
+        📋
+      </span>
+
+      <span>
+        Dashboard
+      </span>
+
+    </a>
+
+
+    <a
+      href="#upload-center"
+      class="mobile-nav-item teacher-nav"
+    >
+
+      <span>
+        📤
+      </span>
+
+      <span>
+        Upload
+      </span>
+
+    </a>
+
+
+    <a
+      href="#builder"
+      class="mobile-nav-item teacher-nav"
+    >
+
+      <span>
+        🛠️
+      </span>
+
+      <span>
+        Builder
+      </span>
+
+    </a>
+
+
+    <!-- =================================================
+         STUDENT MOBILE LINKS
+    ================================================== -->
+
+    <a
+      href="#dashboard"
+      class="mobile-nav-item student-nav"
+    >
+
+      <span>
+        📊
+      </span>
+
+      <span data-i18n="nav_dashboard">
+        Dashboard
+      </span>
+
+    </a>
+
+
+    <a
+      href="#classes"
+      class="mobile-nav-item student-nav"
+    >
+
+      <span>
+        🏫
+      </span>
+
+      <span data-i18n="nav_classes">
+        Classes
+      </span>
+
+    </a>
+
+
+    <a
+      href="#quizzes"
+      class="mobile-nav-item student-nav"
+    >
+
+      <span>
+        ✍️
+      </span>
+
+      <span data-i18n="nav_quizzes">
+        Quizzes
+      </span>
+
+    </a>
+
+  </nav>
+
+
+  <!-- =====================================================
+       APPLICATION SCRIPTS
+  ====================================================== -->
+
+  <script src="js/api.js"></script>
+
+  <script src="js/sync.js"></script>
+
+  <script src="js/data.js"></script>
+
+  <script src="js/language.js"></script>
+
+  <script src="js/accessibility.js"></script>
+
+  <script src="js/progress.js"></script>
+
+  <script src="js/quiz.js"></script>
+
+  <script src="js/builder.js"></script>
+
+  <script src="js/app.js"></script>
+
+  <script src="js/modules.js"></script>
+
+
+  <!-- =====================================================
+       APPLICATION INITIALIZATION
+  ====================================================== -->
+
+  <script>
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+
+        // =============================================
+        // LANGUAGE
+        // =============================================
+
+        if (
+          typeof LanguageManager !==
+          'undefined'
+        ) {
+
+          LanguageManager.init();
+
+        }
+
+
+        // =============================================
+        // ACCESSIBILITY
+        // =============================================
+
+        if (
+          typeof AccessibilityManager !==
+          'undefined'
+        ) {
+
+          AccessibilityManager.init();
+
+        }
+
+
+        // =============================================
+        // PROGRESS TRACKER
+        // =============================================
+
+        if (
+          typeof ProgressTracker !==
+          'undefined'
+        ) {
+
+          ProgressTracker.init();
+
+        }
+
+
+        // =============================================
+        // APP ROUTER
+        // =============================================
+
+        if (
+          typeof AppRouter !==
+          'undefined'
+        ) {
+
+          AppRouter.init();
+
+        }
+
+
+        // =============================================
+        // SYNC MANAGER
+        // =============================================
+
+        if (
+          typeof SyncManager !==
+          'undefined'
+        ) {
+
+          SyncManager.init();
+
+        }
+
+
+        // =============================================
+        // SERVICE WORKER
+        // =============================================
+
+        if (
+          'serviceWorker' in navigator
+        ) {
+
+          navigator
+            .serviceWorker
+            .register('sw.js')
+
+            .then(
+              registration => {
+
+                console.log(
+                  'Shiksha Setu ServiceWorker registered:',
+                  registration.scope
+                );
+
+              }
+            )
+
+            .catch(
+              error => {
+
+                console.log(
+                  'ServiceWorker registration failed:',
+                  error
+                );
+
+              }
+            );
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>

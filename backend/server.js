@@ -272,7 +272,9 @@ app.get(
  */
 
 const fs = require('fs');
-const frontendPath = process.env.VERCEL ? process.cwd() : path.join(__dirname, '..');
+const publicPath = path.join(__dirname, '../public');
+const fallbackPath = path.join(__dirname, '..');
+const frontendPath = fs.existsSync(publicPath) ? publicPath : (process.env.VERCEL ? process.cwd() : fallbackPath);
 
 /*
  * Serve frontend files:
