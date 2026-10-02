@@ -730,120 +730,25 @@
   ====================================================== -->
 
   <script>
+    function bootApp() {
+      if (typeof LanguageManager !== 'undefined') LanguageManager.init();
+      if (typeof AccessibilityManager !== 'undefined') AccessibilityManager.init();
+      if (typeof ProgressTracker !== 'undefined') ProgressTracker.init();
+      if (typeof AppRouter !== 'undefined') AppRouter.init();
+      if (typeof SyncManager !== 'undefined') SyncManager.init();
 
-    document.addEventListener(
-      'DOMContentLoaded',
-      () => {
-
-        // =============================================
-        // LANGUAGE
-        // =============================================
-
-        if (
-          typeof LanguageManager !==
-          'undefined'
-        ) {
-
-          LanguageManager.init();
-
-        }
-
-
-        // =============================================
-        // ACCESSIBILITY
-        // =============================================
-
-        if (
-          typeof AccessibilityManager !==
-          'undefined'
-        ) {
-
-          AccessibilityManager.init();
-
-        }
-
-
-        // =============================================
-        // PROGRESS TRACKER
-        // =============================================
-
-        if (
-          typeof ProgressTracker !==
-          'undefined'
-        ) {
-
-          ProgressTracker.init();
-
-        }
-
-
-        // =============================================
-        // APP ROUTER
-        // =============================================
-
-        if (
-          typeof AppRouter !==
-          'undefined'
-        ) {
-
-          AppRouter.init();
-
-        }
-
-
-        // =============================================
-        // SYNC MANAGER
-        // =============================================
-
-        if (
-          typeof SyncManager !==
-          'undefined'
-        ) {
-
-          SyncManager.init();
-
-        }
-
-
-        // =============================================
-        // SERVICE WORKER
-        // =============================================
-
-        if (
-          'serviceWorker' in navigator
-        ) {
-
-          navigator
-            .serviceWorker
-            .register('sw.js')
-
-            .then(
-              registration => {
-
-                console.log(
-                  'Shiksha Setu ServiceWorker registered:',
-                  registration.scope
-                );
-
-              }
-            )
-
-            .catch(
-              error => {
-
-                console.log(
-                  'ServiceWorker registration failed:',
-                  error
-                );
-
-              }
-            );
-
-        }
-
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => console.log('Shiksha Setu ServiceWorker registered:', registration.scope))
+          .catch(error => console.log('ServiceWorker registration failed:', error));
       }
-    );
+    }
 
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootApp);
+    } else {
+      bootApp();
+    }
   </script>
 
 </body>
