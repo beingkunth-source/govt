@@ -314,18 +314,32 @@ auth: {
 },
 
   logout() {
-    if (typeof ApiClient !== 'undefined') {
-      if (navigator.onLine) {
-        ApiClient.auth.logout().catch(() => {});
+    try {
+      if (typeof ApiClient !== 'undefined') {
+        ApiClient.clearToken();
+        if (navigator.onLine && ApiClient.auth) {
+          ApiClient.auth.logout().catch(() => {});
+        }
       }
-      ApiClient.clearToken();
+    } catch (e) {
+      console.warn('Logout API cleanup error:', e);
     }
 
-    this.auth.isLoggedIn = false;
-    this.saveAuthSession();
+    this.auth = {
+      isLoggedIn: false,
+      role: null,
+      name: '',
+      selectedClass: null,
+      userId: null,
+      email: ''
+    };
+
+    localStorage.removeItem('shiksha_auth_session');
+    localStorage.removeItem('shiksha_jwt');
+
     this.updateHeaderAuthUI();
-    alert('Logged out successfully.');
-    this.navigate('login');
+    window.location.hash = '#login';
+    this.handleRoute();
   },
 
   navigate(routeStr) {
