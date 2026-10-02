@@ -271,106 +271,56 @@ app.get(
  * Therefore ".." points to the project folder.
  */
 
-const frontendPath =
-  path.join(__dirname, '..');
-
+const fs = require('fs');
+const frontendPath = process.env.VERCEL ? process.cwd() : path.join(__dirname, '..');
 
 /*
  * Serve frontend files:
- *
  * /index.html
  * /css/*
  * /js/*
  * /sw.js
  */
 
-app.use(
-  express.static(frontendPath)
-);
-
+app.use(express.static(frontendPath));
 
 /*
  * Main frontend page
  */
 
-app.get(
-  '/',
-  (req, res) => {
-
-    res.sendFile(
-      path.join(
-        frontendPath,
-        'index.html'
-      )
-    );
-
-  }
-);
-
-
-/*
- * Support your hash-based frontend routes.
- *
- * Examples:
- *
- * http://localhost:5000/#login
- * http://localhost:5000/#dashboard
- * http://localhost:5000/#quizzes
- * http://localhost:5000/#progress
- *
- * The browser handles everything after #.
- */
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 /* ==========================================================================
    404 HANDLER
    ========================================================================== */
 
-app.use(
-  (req, res) => {
-
-    /*
-     * API requests should return JSON 404.
-     */
-
-    if (
-      req.originalUrl.startsWith(
-        '/api/'
-      )
-    ) {
-
-      return res
-        .status(404)
-        .json({
-
-          error:
-            'Endpoint not found.',
-
-          method:
-            req.method,
-
-          path:
-            req.originalUrl
-
-        });
-
-    }
-
-
-    /*
-     * Unknown frontend route:
-     * return index.html.
-     */
-
-    return res.sendFile(
-      path.join(
-        frontendPath,
-        'index.html'
-      )
-    );
-
+app.use((req, res) => {
+  /*
+   * API requests should return JSON 404.
+   */
+  if (req.originalUrl.startsWith('/api/')) {
+    return res.status(404).json({
+      error: 'Endpoint not found.',
+      method: req.method,
+      path: req.originalUrl
+    });
   }
-);
+
+  /*
+   * If a specific static file was requested and exists on disk, serve it with correct MIME type
+   */
+  const targetFilePath = path.join(frontendPath, req.path);
+  if (fs.existsSync(targetFilePath) && fs.statSync(targetFilePath).isFile()) {
+    return res.sendFile(targetFilePath);
+  }
+
+  /*
+   * Unknown frontend route: return index.html.
+   */
+  return res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 
 /* ==========================================================================
