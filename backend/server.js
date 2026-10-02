@@ -386,47 +386,49 @@ app.use(
    START SERVER
    ========================================================================== */
 
-app.listen(
-  PORT,
-  () => {
+if (!process.env.VERCEL) {
+  app.listen(
+    PORT,
+    () => {
 
-    console.log('');
-    console.log(
-      '=========================================='
-    );
+      console.log('');
+      console.log(
+        '=========================================='
+      );
 
-    console.log(
-      '🏛️  SHIKSHA SETU'
-    );
+      console.log(
+        '🏛️  SHIKSHA SETU'
+      );
 
-    console.log(
-      '=========================================='
-    );
+      console.log(
+        '=========================================='
+      );
 
-    console.log(
-      `🌐 Website: http://localhost:${PORT}`
-    );
+      console.log(
+        `🌐 Website: http://localhost:${PORT}`
+      );
 
-    console.log(
-      `📡 API: http://localhost:${PORT}/api/v1`
-    );
+      console.log(
+        `📡 API: http://localhost:${PORT}/api/v1`
+      );
 
-    console.log(
-      `❤️  Health: http://localhost:${PORT}/api/v1/health`
-    );
+      console.log(
+        `❤️  Health: http://localhost:${PORT}/api/v1/health`
+      );
 
-    console.log(
-      `🌿 Environment: ${process.env.NODE_ENV || 'development'}`
-    );
+      console.log(
+        `🌿 Environment: ${process.env.NODE_ENV || 'development'}`
+      );
 
-    console.log(
-      '=========================================='
-    );
+      console.log(
+        '=========================================='
+      );
 
-    console.log('');
+      console.log('');
 
-  }
-);
+    }
+  );
+}
 
 
 module.exports = app;
